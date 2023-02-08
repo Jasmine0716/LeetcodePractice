@@ -166,3 +166,47 @@ public class NestedIterator implements Iterator<Integer> {
     }
 }
 ```
+</br>
+
+### <a href="https://leetcode.com/problems/decode-string/description/">394. Decode String</a>
+
+#### Method 1: Stack
+```Java
+class Solution {
+    public String decodeString(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for(int i = 0; i < s.length(); i++) {
+            Character c = s.charAt(i);
+            if(c == ']') {
+                List<Character> list = new ArrayList<>();
+                while(stack.peek() != '[') {
+                    list.add(stack.pop());
+                }
+                stack.pop();
+                int cnt = 0;
+                int p = 1;
+                while(!stack.isEmpty() && Character.isDigit(stack.peek())) {
+                    cnt = cnt + p * (stack.pop() - '0');
+                    p *= 10;
+                }
+
+                for(int j = 0; j < cnt; j++) {
+                    for(int m = list.size() - 1; m >= 0; m--){
+                        stack.push(list.get(m));
+                    }
+                }
+            }else{
+                stack.push(c);
+            }
+        }
+
+        int l = stack.size();
+        char[] res = new char[l];
+        while(--l >= 0){
+            res[l] = stack.pop();
+        }
+        return new String(res);
+    }
+}
+```
